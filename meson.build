@@ -9,6 +9,15 @@ project(
   ]
 )
 
+res_dir = join_paths(meson.source_root(), 'res')
+
+configure_file(
+    output : 'config.h',
+    configuration : {'RES_DIR' : '"' + res_dir + '"'}
+)
+
+add_global_arguments('-I' + meson.current_build_dir(), language : 'cpp')
+
 subdir('src')
 if get_option('tests')
     subdir('tests')

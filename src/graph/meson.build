@@ -3,12 +3,14 @@ sources = files(
     'graph.cpp'
 )
 
-# Define includes
 inc = include_directories('.')
+
+json_dep = dependency('jsoncpp', required: true)
 
 graph_lib = static_library(
   'graph',
   sources,
+  dependencies : json_dep,
   include_directories : inc
 )
 
