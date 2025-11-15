@@ -1,7 +1,14 @@
 #include "graph.h"
+#include "logger.h"
 #include <json/json.h>
 #include <fstream>
-#include <iostream>
+
+void Graph::clear_()
+{
+    vertices_.clear();
+    edges_.clear();
+    edgeCounter_ = 0;
+}
 
 std::unique_ptr<Graph> Graph::gen(const std::string& filepath)
 {
@@ -17,7 +24,7 @@ bool Graph::load(const std::string& filepath)
 
     if (!file.is_open())
     {
-        std::cout << "Failed to open file: " << filepath << std::endl;
+        LOG_ERROR("Failed to open file: ", filepath);
         return false;
     }
 
@@ -27,7 +34,7 @@ bool Graph::load(const std::string& filepath)
     const Json::Value& edgesJson = root["edges"];
     if (!edgesJson.isArray())
     {
-        std::cout << "Expected 'edges' array in JSON file" << std::endl;
+        LOG_ERROR("Expected 'edges' array in JSON file.");
         return false;
     }
 
@@ -54,11 +61,4 @@ unsigned Graph::addEdge(const Edge& edge)
     vertices_[edge.begin].insert(edge.end);
     edges_.emplace(edgeCounter_, edge);
     return edgeCounter_++;
-}
-
-void Graph::clear_()
-{
-    vertices_.clear();
-    edges_.clear();
-    edgeCounter_ = 0;
 }

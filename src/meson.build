@@ -1,3 +1,4 @@
+subdir('util') # graph uses util so it need to be first
 subdir('graph')
 
 executable(
