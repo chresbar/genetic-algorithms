@@ -29,4 +29,8 @@ public:
     bool load(const std::string& filepath);
 
     unsigned addEdge(const Edge& edge);
+
+    bool containsVertex(unsigned vertex);
+
+    size_t vertexCount() const;
 };

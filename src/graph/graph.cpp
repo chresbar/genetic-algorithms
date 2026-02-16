@@ -62,3 +62,15 @@ unsigned Graph::addEdge(const Edge& edge)
     edges_.emplace(edgeCounter_, edge);
     return edgeCounter_++;
 }
+
+bool Graph::containsVertex(unsigned vertex)
+{
+    if (vertices_.find(vertex) != vertices_.end())
+        return true;
+    return false;
+}
+
+size_t Graph::vertexCount() const
+{
+    return vertices_.size();
+}
