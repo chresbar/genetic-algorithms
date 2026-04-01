@@ -5,7 +5,7 @@
 int main()
 {
     GeneticAlgorithm algorithm;
-    algorithm.loadGraph(std::string(RES_DIR) + "small_graph.json");
+    algorithm.loadGraph(std::string(RES_DIR) + "city.json");
     algorithm.setSize(10);
     algorithm.populate();
     LOG_INFO("Test");

@@ -1,5 +1,6 @@
 util_sources = files(
     'logger.h',
+    'utils.h',
     'logger.cpp'
 )
 

@@ -1,0 +1,31 @@
+{
+    "edges" : [
+        {"begin" : 0, "end" : 1, "weight" : 128, "directed" : true},
+        {"begin" : 0, "end" : 9, "weight" : 75, "directed" : false},
+
+        {"begin" : 1, "end" : 2, "weight" : 128, "directed" : true},
+        {"begin" : 1, "end" : 8, "weight" : 75, "directed" : false},
+
+        {"begin" : 2, "end" : 3, "weight" : 128, "directed" : true},
+        {"begin" : 2, "end" : 7, "weight" : 75, "directed" : false},
+
+        {"begin" : 3, "end" : 4, "weight" : 128, "directed" : true},
+        {"begin" : 3, "end" : 6, "weight" : 75, "directed" : false},
+
+        {"begin" : 4, "end" : 5, "weight" : 75, "directed" : false},
+
+        {"begin" : 5, "end" : 6, "weight" : 128, "directed" : true},
+        {"begin" : 5, "end" : 4, "weight" : 75, "directed" : false},
+
+        {"begin" : 6, "end" : 7, "weight" : 128, "directed" : true},
+        {"begin" : 6, "end" : 3, "weight" : 75, "directed" : false},
+
+        {"begin" : 7, "end" : 8, "weight" : 128, "directed" : true},
+        {"begin" : 7, "end" : 2, "weight" : 75, "directed" : false},
+        
+        {"begin" : 8, "end" : 9, "weight" : 128, "directed" : true},
+        {"begin" : 8, "end" : 1, "weight" : 75, "directed" : false},
+
+        {"begin" : 9, "end" : 0, "weight" : 75, "directed" : false}
+    ]
+}
