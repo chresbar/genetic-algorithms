@@ -18,6 +18,8 @@ configure_file(
 
 add_global_arguments('-I' + meson.current_build_dir(), language : 'cpp')
 
+inc = include_directories('src')
+
 subdir('src')
 if get_option('tests')
     subdir('tests')

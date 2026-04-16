@@ -1,4 +1,6 @@
 #include "geneticAlgorithm.h"
+
+#include <selector/selector.h>
 #include <algorithm>
 
 void GeneticAlgorithm::loadGraph(const std::string& filepath)
@@ -16,8 +18,7 @@ bool GeneticAlgorithm::populate()
     std::vector<unsigned> individual(vertexCount);
     std::iota(individual.begin(), individual.end(), 0);
 
-    std::random_device rd;
-    gen = std::mt19937(rd());
+    auto& gen = Rng::get();
 
     population_.clear();
     population_.reserve(size_);

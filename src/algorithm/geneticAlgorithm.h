@@ -1,29 +1,18 @@
 #pragma once
 
-#include <vector>
-#include <random>
-
-#include "graph.h"
-
-struct Individual
-{
-    std::vector<unsigned> genom;
-    unsigned score;
-
-    Individual(const std::vector<unsigned>& g, unsigned s): genom(g), score(s) {}
-};
+#include <algorithm/individual/individual.h>
+#include <graph/graph.h>
 
 class GeneticAlgorithm
 {
 private:
     std::unique_ptr<Graph> graph_;
     std::vector<Individual> population_;
-
-    std::mt19937 gen;
     
     unsigned size_; // population size
 
     unsigned calculateScore_(const std::vector<unsigned>& genom) const;
+    // std::vector<Individual> genNextPopulation_();
 
 public:
     
