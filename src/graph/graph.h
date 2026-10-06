@@ -19,7 +19,7 @@ private:
 public:
     static std::unique_ptr<Graph> gen(const std::string& filepath);
 
-    bool load(const std::string& filepath);
+    void load(const std::string& filepath);
 
     void addEdge(unsigned begin, unsigned end, unsigned weight, bool isDirected);
 

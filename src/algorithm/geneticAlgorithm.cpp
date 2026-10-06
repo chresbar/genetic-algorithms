@@ -2,17 +2,26 @@
 
 #include <selector/selector.h>
 #include <algorithm>
+#include <util/logger.h>
+#include <stdexcept>
 
 void GeneticAlgorithm::loadGraph(const std::string& filepath)
 {
-    graph_ = Graph::gen(filepath);
+    try
+    {
+        graph_ = Graph::gen(filepath);
+    }
+    catch(const std::exception& e)
+    {
+        throw;
+    }
 }
 
-bool GeneticAlgorithm::populate()
+void GeneticAlgorithm::populate()
 {
     if (!graph_)
-        return false;
-
+        throw std::runtime_error("Graph is not initialized");
+        
     unsigned vertexCount = graph_->vertexCount();
 
     std::vector<unsigned> individual(vertexCount);
@@ -28,8 +37,6 @@ bool GeneticAlgorithm::populate()
         auto score = calculateScore_(individual);
         population_.emplace_back(individual, score);
     }
-
-    return true;
 }
 
 void GeneticAlgorithm::setSize(unsigned size)
@@ -40,6 +47,9 @@ void GeneticAlgorithm::setSize(unsigned size)
 unsigned GeneticAlgorithm::calculateScore_(const std::vector<unsigned>& genom) const
 {
     unsigned score = 0;
+
+    if (!graph_)
+        throw std::runtime_error("Graph is not initialized");
 
     if (genom.size() < 2u || !graph_)
         return score;

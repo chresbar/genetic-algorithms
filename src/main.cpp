@@ -4,10 +4,18 @@
 
 int main()
 {
-    GeneticAlgorithm algorithm;
-    algorithm.loadGraph(std::string(RES_DIR) + "city.json");
-    algorithm.setSize(100);
-    algorithm.populate();
-    LOG_INFO("Test");
+    try
+    {
+        GeneticAlgorithm algorithm;
+        algorithm.loadGraph(std::string(RES_DIR) + "city.json");
+        algorithm.setSize(100);
+        algorithm.populate();
+    }
+    catch(const std::exception& e)
+    {
+        LOG_ERROR(e.what());
+    }
+    
+    LOG_INFO("Main");
     return 0;
 }

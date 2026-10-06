@@ -4,34 +4,37 @@
 #include <json/json.h>
 #include <fstream>
 #include <queue>
+#include <stdexcept>
 
 std::unique_ptr<Graph> Graph::gen(const std::string& filepath)
 {
     auto graph = std::make_unique<Graph>();
-    if (!graph->load(filepath))
-        return nullptr;
+
+    try
+    {
+        graph->load(filepath);
+    }
+    catch(const std::exception& e)
+    {
+        throw;
+    }
+        
     return graph;
 }
 
-bool Graph::load(const std::string& filepath)
+void Graph::load(const std::string& filepath)
 {
     std::ifstream file(filepath, std::ifstream::binary);
 
     if (!file.is_open())
-    {
-        LOG_ERROR("Failed to open file: ", filepath);
-        return false;
-    }
+        throw std::runtime_error("Faild to open file: " + filepath);
 
     Json::Value root;
     file >> root;
 
     const Json::Value& edgesJson = root["edges"];
     if (!edgesJson.isArray())
-    {
-        LOG_ERROR("Expected 'edges' array in JSON file.");
-        return false;
-    }
+        throw std::runtime_error("Expected 'edges' array in JSON file.");
 
     clear_();
 
@@ -45,9 +48,14 @@ bool Graph::load(const std::string& filepath)
         );
     }
 
-    findAllPaths_();
-
-    return true;
+    try
+    {
+        findAllPaths_();
+    }
+    catch(const std::exception& e)
+    {
+        LOG_ERROR(e.what());
+    }
 }
 
 void Graph::addEdge(unsigned begin, unsigned end, unsigned weight, bool isDirected)
@@ -125,7 +133,7 @@ std::optional<unsigned> Graph::calculatePathLength_(unsigned begin, unsigned end
 void Graph::findAllPaths_()
 {
     if (vertices_.empty())
-        return;
+        throw std::runtime_error("There are no vertices");
 
     for (const auto& [begin, _] : vertices_)
     {

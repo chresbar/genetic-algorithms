@@ -17,7 +17,7 @@ private:
 public:
     
     void loadGraph(const std::string& filepath);
-    bool populate();
+    void populate();
 
     void setBegin(unsigned begin);
     void setSize(unsigned size);
