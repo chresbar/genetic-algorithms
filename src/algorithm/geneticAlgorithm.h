@@ -16,6 +16,8 @@ private:
 
     unsigned calculateScore_(const std::vector<unsigned>& genom) const;
     std::vector<Individual> selectFittest_();
+    std::vector<Individual> genNewPopuation_(std::vector<Individual> population);
+    std::pair<Individual, Individual> cross_(Individual parentA, Individual parentB);
 
 public:
     

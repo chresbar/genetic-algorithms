@@ -74,3 +74,32 @@ std::vector<Individual> GeneticAlgorithm::selectFittest_()
 
     return strategy_(std::move(population_));
 }
+
+std::vector<Individual> GeneticAlgorithm::genNewPopuation_(std::vector<Individual> population)
+{
+    if (population.empty())
+        throw std::runtime_error("Empty population vector");
+
+    auto& gen = Rng::get();
+    std::vector<Individual> children(population.size() * 2);
+
+    for (size_t round = 0; round < 2; ++round)
+    {
+        std::shuffle(population.begin(), population.end(), gen);
+
+        for (size_t i = 0; i < population.size(); i += 2)
+        {
+            auto [childA, childB] = cross_(population[i], population[i + 1]);
+
+            children.push_back(std::move(childA));
+            children.push_back(std::move(childB));
+        }
+    }
+
+    return children;
+}
+
+std::pair<Individual, Individual> GeneticAlgorithm::cross_(Individual parentA, Individual parentB)
+{
+    return {Individual({}, -1), Individual({}, -1)};
+}
