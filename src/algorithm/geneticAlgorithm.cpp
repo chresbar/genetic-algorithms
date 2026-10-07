@@ -1,6 +1,5 @@
 #include "geneticAlgorithm.h"
 
-#include <selector/selector.h>
 #include <algorithm>
 #include <util/logger.h>
 #include <stdexcept>
@@ -42,7 +41,12 @@ void GeneticAlgorithm::populate()
 void GeneticAlgorithm::setSize(unsigned size)
 {
     size_ = size;
-}   
+}
+
+void GeneticAlgorithm::setSelectStrategy(Selector::Select strategy)
+{
+    strategy_ = std::move(strategy);
+}
 
 unsigned GeneticAlgorithm::calculateScore_(const std::vector<unsigned>& genom) const
 {
@@ -61,4 +65,12 @@ unsigned GeneticAlgorithm::calculateScore_(const std::vector<unsigned>& genom) c
     }
 
     return score;
+}
+
+std::vector<Individual> GeneticAlgorithm::selectFittest_()
+{
+    if (!strategy_)
+        throw std::runtime_error("Selection strategy has not been set");
+
+    return strategy_(std::move(population_));
 }

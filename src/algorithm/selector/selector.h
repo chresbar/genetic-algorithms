@@ -1,17 +1,13 @@
 #pragma once
 
-#include <individual/individual.h>
+#include <algorithm/individual/individual.h>
 #include <util/rng.h>
 
 #include <functional>
 
 namespace Selector
 {
-    template <typename Strategy>
-    std::vector<Individual> select(std::vector<Individual> population)
-    {
-        return Strategy::apply(std::move(population));
-    }
+    using Select = std::function<std::vector<Individual>(std::vector<Individual>)>;
 
     struct Tournament 
     {
