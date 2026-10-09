@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <util/logger.h>
+#include <util/utils.h>
 #include <stdexcept>
 
 void GeneticAlgorithm::loadGraph(const std::string& filepath)
@@ -101,5 +102,14 @@ std::vector<Individual> GeneticAlgorithm::genNewPopuation_(std::vector<Individua
 
 std::pair<Individual, Individual> GeneticAlgorithm::cross_(Individual parentA, Individual parentB)
 {
+    try
+    {
+        auto [begin, end] = genRange(0, parentA.size() - 1);
+    }
+    catch(const std::exception& e)
+    {
+        throw;
+    }
+    
     return {Individual({}, -1), Individual({}, -1)};
 }

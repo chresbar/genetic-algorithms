@@ -13,4 +13,6 @@ public:
     
     bool operator<(const Individual& individual) const;
     bool operator>(const Individual& individual) const;
+
+    size_t size() const;
 };

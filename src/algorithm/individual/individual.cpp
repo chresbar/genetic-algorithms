@@ -11,3 +11,8 @@ bool Individual::operator>(const Individual& individual) const
 {
     return this->score > individual.score;
 }
+
+size_t Individual::size() const
+{
+    return this->genom.size();
+}
