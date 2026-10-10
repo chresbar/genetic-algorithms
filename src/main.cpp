@@ -11,6 +11,7 @@ int main()
         algorithm.setSize(100);
         algorithm.setSelectStrategy(Selector::Tournament::apply);
         algorithm.populate();
+        algorithm.run();
     }
     catch(const std::exception& e)
     {

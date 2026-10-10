@@ -1,6 +1,7 @@
 #include "geneticAlgorithm.h"
 
 #include <algorithm>
+#include <utility>
 #include <util/logger.h>
 #include <util/utils.h>
 #include <stdexcept>
@@ -68,7 +69,7 @@ unsigned GeneticAlgorithm::calculateScore_(const std::vector<unsigned>& genom) c
     return score;
 }
 
-std::vector<Individual> GeneticAlgorithm::selectFittest_()
+Population GeneticAlgorithm::selectFittest_()
 {
     if (!strategy_)
         throw std::runtime_error("Selection strategy has not been set");
@@ -76,13 +77,14 @@ std::vector<Individual> GeneticAlgorithm::selectFittest_()
     return strategy_(std::move(population_));
 }
 
-std::vector<Individual> GeneticAlgorithm::genNewPopuation_(std::vector<Individual> population)
+Population GeneticAlgorithm::genNewPopuation_(Population& population)
 {
     if (population.empty())
         throw std::runtime_error("Empty population vector");
 
     auto& gen = Rng::get();
-    std::vector<Individual> children(population.size() * 2);
+    Population children;
+    children.reserve(population.size() * 2);
 
     for (size_t round = 0; round < 2; ++round)
     {
@@ -100,16 +102,47 @@ std::vector<Individual> GeneticAlgorithm::genNewPopuation_(std::vector<Individua
     return children;
 }
 
-std::pair<Individual, Individual> GeneticAlgorithm::cross_(Individual parentA, Individual parentB)
+std::pair<Individual, Individual> GeneticAlgorithm::cross_(Individual childA, Individual childB)
 {
     try
     {
-        auto [begin, end] = genRange(0, parentA.size() - 1);
+        auto [begin, end] = genRange(childA.size() - 1);
+        GenomMap mapA;
+        GenomMap mapB;
+
+        for (auto i = begin; i <= end; ++i)
+        {
+            mapA[childB[i]] = childA[i];
+            mapB[childA[i]] = childB[i];
+            std::swap(childA[i], childB[i]);
+        }
+
+        childA.mapGenom(0, begin, mapA);
+        childA.mapGenom(end + 1, childA.size(), mapA);
+
+        childB.mapGenom(0, begin, mapB);
+        childB.mapGenom(end + 1, childB.size(), mapB);
+
+        childA.setScore(calculateScore_(childA.getGenom()));
+        childB.setScore(calculateScore_(childB.getGenom()));
     }
     catch(const std::exception& e)
     {
         throw;
     }
-    
-    return {Individual({}, -1), Individual({}, -1)};
+
+    return {childA, childB};
+}
+
+void GeneticAlgorithm::run()
+{
+    try
+    {
+        auto population = selectFittest_();
+        population_ = genNewPopuation_(population);
+    }
+    catch(const std::exception& e)
+    {
+        throw;
+    }
 }
