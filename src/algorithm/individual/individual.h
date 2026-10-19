@@ -25,4 +25,5 @@ public:
     Genom& getGenom();
     void setScore(unsigned score);
 
+    void mutate();
 };

@@ -16,17 +16,20 @@ private:
     
     unsigned size_; // population size
 
+    double mutationRate_ = 0;
+
     Population selectFittest_();
-    Population genNewPopuation_(Population& population);
+    Population genNextPopuation_(Population& population);
     std::pair<Individual, Individual> cross_(Individual childA, Individual childB);
 
 public:
     
     void loadGraph(const std::string& filepath);
-    void createInitialPopulation();
+    void genInitialPopulation();
     void run();
 
     void setBegin(unsigned begin);
     void setSize(unsigned size);
+    void setMutationRate(double rate);
     void setSelectStrategy(Selector::Select strategy);
 };

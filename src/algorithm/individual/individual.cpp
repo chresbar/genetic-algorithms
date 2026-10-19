@@ -1,6 +1,7 @@
 #include "individual.h"
 
 #include <stdexcept>
+#include <util/utils.h>
 
 Individual::Individual(const Genom& g, unsigned s): genom(g), score(s) {}
 
@@ -47,4 +48,10 @@ Genom& Individual::getGenom()
 void Individual::setScore(unsigned score)
 {
     this->score = score;
+}
+
+void Individual::mutate()
+{
+    auto [i, j] = genRange(genom.size() - 1);
+    std::swap(genom[i], genom[j]);
 }

@@ -18,7 +18,7 @@ void GeneticAlgorithm::loadGraph(const std::string& filepath)
     }
 }
 
-void GeneticAlgorithm::createInitialPopulation()
+void GeneticAlgorithm::genInitialPopulation()
 {
     if (!graph_)
         throw std::runtime_error("Graph is not initialized");
@@ -51,6 +51,11 @@ void GeneticAlgorithm::setSize(unsigned size)
     size_ = size;
 }
 
+void GeneticAlgorithm::setMutationRate(double rate)
+{
+    mutationRate_ = rate;
+}
+
 void GeneticAlgorithm::setSelectStrategy(Selector::Select strategy)
 {
     strategy_ = std::move(strategy);
@@ -64,7 +69,7 @@ Population GeneticAlgorithm::selectFittest_()
     return strategy_(std::move(population_));
 }
 
-Population GeneticAlgorithm::genNewPopuation_(Population& population)
+Population GeneticAlgorithm::genNextPopuation_(Population& population)
 {
     if (population.empty())
         throw std::runtime_error("Empty population vector");
@@ -110,6 +115,15 @@ std::pair<Individual, Individual> GeneticAlgorithm::cross_(Individual childA, In
         childB.mapGenom(0, begin, mapB);
         childB.mapGenom(end + 1, childB.size(), mapB);
 
+        auto& gen = Rng::get();
+        std::uniform_real_distribution<double> dist(0.0, 1.0);
+
+        if (dist(gen) <= mutationRate_)
+            childA.mutate();
+
+        if (dist(gen) <= mutationRate_)
+            childB.mutate();
+
         childA.setScore(graph_->getPathLength(childA.getGenom()));
         childB.setScore(graph_->getPathLength(childB.getGenom()));
     }
@@ -126,7 +140,7 @@ void GeneticAlgorithm::run()
     try
     {
         auto population = selectFittest_();
-        population_ = genNewPopuation_(population);
+        population_ = genNextPopuation_(population);
     }
     catch(const std::exception& e)
     {
