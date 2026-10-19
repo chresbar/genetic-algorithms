@@ -4,6 +4,7 @@
 #include <memory>
 #include <unordered_map>
 #include <optional>
+#include <vector>
 
 class Graph
 {
@@ -27,5 +28,6 @@ public:
 
     size_t vertexCount() const;
 
-    std::optional<unsigned> getPathLength(unsigned v1, unsigned v2) const;
+    unsigned getEdgeWeight(unsigned v1, unsigned v2) const;
+    unsigned getPathLength(const std::vector<unsigned>& path) const;
 };

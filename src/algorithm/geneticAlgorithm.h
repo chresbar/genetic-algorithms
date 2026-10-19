@@ -16,7 +16,6 @@ private:
     
     unsigned size_; // population size
 
-    unsigned calculateScore_(const std::vector<unsigned>& genom) const;
     Population selectFittest_();
     Population genNewPopuation_(Population& population);
     std::pair<Individual, Individual> cross_(Individual childA, Individual childB);
@@ -24,7 +23,7 @@ private:
 public:
     
     void loadGraph(const std::string& filepath);
-    void populate();
+    void createInitialPopulation();
     void run();
 
     void setBegin(unsigned begin);

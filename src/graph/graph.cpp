@@ -78,15 +78,35 @@ size_t Graph::vertexCount() const
     return vertices_.size();
 }
 
-std::optional<unsigned> Graph::getPathLength(unsigned v1, unsigned v2) const
+unsigned Graph::getEdgeWeight(unsigned v1, unsigned v2) const
 {
-    if (vertices_.find(v1) == vertices_.end() || vertices_.find(v2) == vertices_.end())
-        return std::nullopt;
+    for (const auto& v : {v1, v2}) 
+    {
+        if (vertices_.find(v) == vertices_.end())
+            throw std::runtime_error("Graph does not contain vertex with ID: " + v);
+    }
 
     auto pathID = genHash(v1, v2);
-    if (paths_.find(pathID) != paths_.end())
-        return paths_.at(pathID);
-    return std::nullopt;
+    if (paths_.find(pathID) == paths_.end())
+        throw std::runtime_error("Graph does not contain edge with ID: " + pathID);
+    return paths_.at(pathID);
+}
+
+unsigned Graph::getPathLength(const std::vector<unsigned>& path) const
+{
+    unsigned length = 0;
+
+    try
+    {
+        for (size_t i = 1; i < path.size(); ++i)
+            length += getEdgeWeight(path[i - 1], path[i]);
+    }
+    catch(const std::exception& e)
+    {
+        throw;
+    }
+
+    return length;
 }
 
 void Graph::clear_()

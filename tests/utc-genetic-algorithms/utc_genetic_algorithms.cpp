@@ -12,7 +12,7 @@ TEST_CASE("Genetic_Algorithm_Load_Graph_With_Wrong_File_Path")
 TEST_CASE("Genetic_Algorithm_Populate_Without_Graph") 
 {
     GeneticAlgorithm algorithm;
-    REQUIRE_THROWS(algorithm.populate());
+    REQUIRE_THROWS(algorithm.createInitialPopulation());
 }
 
 // Positive Test Cases

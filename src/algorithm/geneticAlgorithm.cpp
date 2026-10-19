@@ -18,7 +18,7 @@ void GeneticAlgorithm::loadGraph(const std::string& filepath)
     }
 }
 
-void GeneticAlgorithm::populate()
+void GeneticAlgorithm::createInitialPopulation()
 {
     if (!graph_)
         throw std::runtime_error("Graph is not initialized");
@@ -35,8 +35,14 @@ void GeneticAlgorithm::populate()
     for (unsigned i = 0; i < size_; ++i)
     {
         std::shuffle(individual.begin(), individual.end(), gen);
-        auto score = calculateScore_(individual);
-        population_.emplace_back(individual, score);
+        try
+        {
+            population_.emplace_back(individual, graph_->getPathLength(individual));
+        }
+        catch(const std::exception& e)
+        {
+            throw;
+        }  
     }
 }
 
@@ -48,25 +54,6 @@ void GeneticAlgorithm::setSize(unsigned size)
 void GeneticAlgorithm::setSelectStrategy(Selector::Select strategy)
 {
     strategy_ = std::move(strategy);
-}
-
-unsigned GeneticAlgorithm::calculateScore_(const std::vector<unsigned>& genom) const
-{
-    unsigned score = 0;
-
-    if (!graph_)
-        throw std::runtime_error("Graph is not initialized");
-
-    if (genom.size() < 2u || !graph_)
-        return score;
-
-    for (size_t i = 0; i < genom.size() - 1; ++i)
-    {
-        if(auto weight = graph_->getPathLength(genom[i], genom[i + 1]))
-            score += weight.value();
-    }
-
-    return score;
 }
 
 Population GeneticAlgorithm::selectFittest_()
@@ -123,8 +110,8 @@ std::pair<Individual, Individual> GeneticAlgorithm::cross_(Individual childA, In
         childB.mapGenom(0, begin, mapB);
         childB.mapGenom(end + 1, childB.size(), mapB);
 
-        childA.setScore(calculateScore_(childA.getGenom()));
-        childB.setScore(calculateScore_(childB.getGenom()));
+        childA.setScore(graph_->getPathLength(childA.getGenom()));
+        childB.setScore(graph_->getPathLength(childB.getGenom()));
     }
     catch(const std::exception& e)
     {
