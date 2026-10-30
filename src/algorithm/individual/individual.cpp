@@ -5,6 +5,14 @@
 
 Individual::Individual(const Genom& g, unsigned s): genom(g), score(s) {}
 
+unsigned Individual::resolveGenom(unsigned gen, const GenomMap& genomMap)
+{
+    while (genomMap.find(gen) != genomMap.end())
+        gen = genomMap.at(gen);
+
+    return gen;
+}
+
 bool Individual::operator<(const Individual& individual) const
 {
     return this->score < individual.score;
@@ -30,13 +38,13 @@ size_t Individual::size() const
 
 void Individual::mapGenom(size_t begin, size_t end, const GenomMap& genomMap)
 {
-    if (end < begin || genom.size() < begin || genom.size() < end)
+    if (end < begin || genom.size() < end)
         throw std::out_of_range("Genom map out of range");
     
     for (auto i = begin; i < end; ++i)
     {
         if (genomMap.find(genom[i]) != genomMap.end())
-            genom[i] = genomMap.at(genom[i]);
+            genom[i] = resolveGenom(genom[i], genomMap);
     }
 }
 

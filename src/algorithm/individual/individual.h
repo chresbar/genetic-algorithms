@@ -9,8 +9,10 @@ using GenomMap = std::unordered_map<unsigned, unsigned>;
 class Individual
 {
 private:
-    Genom genom;
+    Genom genom;    
     unsigned score;
+
+    static unsigned resolveGenom(unsigned gen, const GenomMap& genomMap);
 
 public:
     Individual(const Genom& g, unsigned s);
