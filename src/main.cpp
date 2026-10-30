@@ -9,9 +9,9 @@ int main()
         GeneticAlgorithm algorithm;
         algorithm.loadGraph(std::string(RES_DIR) + "city.json");
         algorithm.setSize(100);
+        algorithm.setIterationCount(1000);
         algorithm.setMutationRate(0.1);
-        algorithm.setSelectStrategy(Selector::Tournament::apply);
-        algorithm.genInitialPopulation();
+        algorithm.setSelectStrategy(Selector::Shuffle::apply);
         algorithm.run();
     }
     catch(const std::exception& e)

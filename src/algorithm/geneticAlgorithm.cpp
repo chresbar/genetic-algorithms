@@ -51,6 +51,11 @@ void GeneticAlgorithm::setSize(unsigned size)
     size_ = size;
 }
 
+void GeneticAlgorithm::setIterationCount(unsigned count)
+{
+    iterationCount_ = count;
+}
+
 void GeneticAlgorithm::setMutationRate(double rate)
 {
     mutationRate_ = rate;
@@ -139,8 +144,12 @@ void GeneticAlgorithm::run()
 {
     try
     {
-        auto population = selectFittest_();
-        population_ = genNextPopuation_(population);
+        genInitialPopulation();
+        for (unsigned i = 0; i < iterationCount_; ++i)
+        {
+            auto population = selectFittest_();
+            population_ = genNextPopuation_(population);
+        }
     }
     catch(const std::exception& e)
     {

@@ -15,6 +15,7 @@ private:
     Selector::Select strategy_;
     
     unsigned size_; // population size
+    unsigned iterationCount_;
 
     double mutationRate_ = 0;
 
@@ -28,8 +29,8 @@ public:
     void genInitialPopulation();
     void run();
 
-    void setBegin(unsigned begin);
     void setSize(unsigned size);
+    void setIterationCount(unsigned count);
     void setMutationRate(double rate);
     void setSelectStrategy(Selector::Select strategy);
 };
