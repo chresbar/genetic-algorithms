@@ -25,6 +25,7 @@ public:
     void mapGenom(size_t begin, size_t end, const GenomMap& genomMap);
 
     Genom& getGenom();
+    unsigned getScore() const;
     void setScore(unsigned score);
 
     void mutate();

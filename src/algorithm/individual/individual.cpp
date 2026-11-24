@@ -53,6 +53,11 @@ Genom& Individual::getGenom()
     return genom;
 }
 
+unsigned Individual::getScore() const
+{
+    return this->score;
+}
+
 void Individual::setScore(unsigned score)
 {
     this->score = score;

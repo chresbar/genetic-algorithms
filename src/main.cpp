@@ -11,14 +11,14 @@ int main()
         algorithm.setSize(100);
         algorithm.setIterationCount(1000);
         algorithm.setMutationRate(0.1);
-        algorithm.setSelectStrategy(Selector::Shuffle::apply);
+        algorithm.setSelectStrategy(Selector::Elitism::apply);
         algorithm.run();
+        LOG_INFO("Best score: ", algorithm.getBestScore());
     }
     catch(const std::exception& e)
     {
         LOG_ERROR(e.what());
     }
     
-    LOG_INFO("Main");
     return 0;
 }

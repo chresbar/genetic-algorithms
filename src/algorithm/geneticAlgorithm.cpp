@@ -66,6 +66,13 @@ void GeneticAlgorithm::setSelectStrategy(Selector::Select strategy)
     strategy_ = std::move(strategy);
 }
 
+unsigned GeneticAlgorithm::getBestScore() const
+{
+    if (bestIndividual_)
+        return bestIndividual_.value().getScore();
+    throw std::runtime_error("No best individual found yet");
+}
+
 Population GeneticAlgorithm::selectFittest_()
 {
     if (!strategy_)
@@ -90,6 +97,11 @@ Population GeneticAlgorithm::genNextPopuation_(Population& population)
         for (size_t i = 0; i < population.size(); i += 2)
         {
             auto [childA, childB] = cross_(population[i], population[i + 1]);
+
+            if (!bestIndividual_)
+                bestIndividual_ = std::min(childA, childB);
+            else
+                bestIndividual_ = std::min(bestIndividual_.value(), std::min(childA, childB));
 
             children.push_back(std::move(childA));
             children.push_back(std::move(childB));

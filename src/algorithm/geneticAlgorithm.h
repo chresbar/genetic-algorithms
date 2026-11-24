@@ -11,6 +11,7 @@ class GeneticAlgorithm
 private:
     std::unique_ptr<Graph> graph_;
     Population population_;
+    std::optional<Individual> bestIndividual_;
 
     Selector::Select strategy_;
     
@@ -24,7 +25,6 @@ private:
     std::pair<Individual, Individual> cross_(Individual childA, Individual childB);
 
 public:
-    
     void loadGraph(const std::string& filepath);
     void genInitialPopulation();
     void run();
@@ -33,4 +33,6 @@ public:
     void setIterationCount(unsigned count);
     void setMutationRate(double rate);
     void setSelectStrategy(Selector::Select strategy);
+
+    unsigned getBestScore() const;
 };
