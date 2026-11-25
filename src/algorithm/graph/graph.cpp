@@ -24,13 +24,7 @@ std::unique_ptr<Graph> Graph::gen(const std::string& filepath)
 
 void Graph::load(const std::string& filepath)
 {
-    std::ifstream file(filepath, std::ifstream::binary);
-
-    if (!file.is_open())
-        throw std::runtime_error("Faild to open file: " + filepath);
-
-    Json::Value root;
-    file >> root;
+    auto root = loadJson(filepath);
 
     if (!isJsonType(root[GraphKeys::Edges], Json::ValueType::arrayValue))
         throw std::runtime_error("Expected 'edges' array in JSON file.");
@@ -66,7 +60,7 @@ void Graph::load(const std::string& filepath)
     }
     catch(const std::exception& e)
     {
-        LOG_ERROR(e.what());
+       throw;
     }
 }
 

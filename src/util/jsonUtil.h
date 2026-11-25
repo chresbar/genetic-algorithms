@@ -1,5 +1,6 @@
 #pragma once
 
+#include <fstream>
 #include <jsoncpp/json/json.h>
 
 namespace ConfigKeys
@@ -42,4 +43,17 @@ inline bool isJsonType(const Json::Value& value, Json::ValueType type)
         return value.isObject();
     }
     return false;
+}
+
+inline const Json::Value loadJson(const std::string& filepath)
+{
+    std::ifstream file(filepath, std::ifstream::binary);
+
+    if (!file.is_open())
+        throw std::runtime_error("Faild to open file: " + filepath);
+
+    Json::Value root;
+    file >> root;
+
+    return root;
 }

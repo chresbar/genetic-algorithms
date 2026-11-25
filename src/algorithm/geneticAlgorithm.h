@@ -25,10 +25,8 @@ private:
     std::pair<Individual, Individual> cross_(Individual childA, Individual childB);
 
 public:
-    GeneticAlgorithm();
-    GeneticAlgorithm(const std::string& configPath);
+    void load(const std::string& filepath);
 
-    void loadGraph(const std::string& filepath);
     void genInitialPopulation();
     void run();
 

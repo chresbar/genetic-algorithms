@@ -6,19 +6,10 @@
 #include <util/utils.h>
 #include <util/jsonUtil.h>
 #include <stdexcept>
-#include <fstream>
 
-GeneticAlgorithm::GeneticAlgorithm() {}
-
-GeneticAlgorithm::GeneticAlgorithm(const std::string& configPath)
+void GeneticAlgorithm::load(const std::string& filepath)
 {
-    std::ifstream file(configPath, std::ifstream::binary);
-
-    if (!file.is_open())
-        throw std::runtime_error("Faild to open file: " + configPath);
-
-    Json::Value root;
-    file >> root;
+    auto root = loadJson(filepath);
 
     static const std::unordered_map<std::string, Json::ValueType> configKeys = {
         {ConfigKeys::Graph, Json::ValueType::stringValue},
@@ -36,23 +27,11 @@ GeneticAlgorithm::GeneticAlgorithm(const std::string& configPath)
 
     try
     {
-        loadGraph(root[ConfigKeys::Graph].asString());
+        graph_ = Graph::gen(root[ConfigKeys::Graph].asString());
         setSize(root[ConfigKeys::Size].asUInt());
         setIterationCount(root[ConfigKeys::Iterations].asUInt());
         setMutationRate(root[ConfigKeys::Mutation].asDouble());
         setSelectStrategy(root[ConfigKeys::Strategy].asString());
-    }
-    catch(const std::exception& e)
-    {
-        throw;
-    }    
-}
-
-void GeneticAlgorithm::loadGraph(const std::string& filepath)
-{
-    try
-    {
-        graph_ = Graph::gen(filepath);
     }
     catch(const std::exception& e)
     {

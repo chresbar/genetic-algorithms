@@ -6,7 +6,8 @@ int main()
 {
     try
     {
-        GeneticAlgorithm algorithm(std::string(RES_DIR) + "config/shuffle_run.json");
+        GeneticAlgorithm algorithm;
+        algorithm.load(std::string(RES_DIR) + "config/shuffle_run.json");
         algorithm.run();
         LOG_INFO("Best score: ", algorithm.getBestScore());
     }
