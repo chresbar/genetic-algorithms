@@ -1,5 +1,4 @@
 individual_sources = files(
-    'individual.h',
     'individual.cpp'
 )
 

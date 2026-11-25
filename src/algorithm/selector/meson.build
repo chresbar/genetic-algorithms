@@ -1,10 +1,5 @@
-selector_sources = files(
-    'selector.h'
-)
-
 selector_lib = static_library(
   'selector',
-  sources: selector_sources,
   include_directories : inc,
   dependencies: [util_dep]
 )

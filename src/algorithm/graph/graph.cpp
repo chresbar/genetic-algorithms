@@ -1,5 +1,5 @@
 #include "graph.h"
-#include <util/logger.h>
+#include <util/logger/logger.h>
 #include <util/utils.h>
 #include <json/json.h>
 #include <fstream>

@@ -1,6 +1,6 @@
 #include <config.h>
 #include <algorithm/geneticAlgorithm.h>
-#include <util/logger.h>
+#include <util/logger/logger.h>
 
 int main()
 {

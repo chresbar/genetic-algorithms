@@ -1,7 +1,7 @@
 #pragma once
 
 #include <algorithm/individual/individual.h>
-#include <graph/graph.h>
+#include <algorithm/graph/graph.h>
 #include <algorithm/selector/selector.h>
 
 using Population = std::vector<Individual>;

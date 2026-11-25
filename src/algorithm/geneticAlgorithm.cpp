@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <utility>
-#include <util/logger.h>
+#include <util/logger/logger.h>
 #include <util/utils.h>
 #include <stdexcept>
 #include <json/json.h>
@@ -24,7 +24,14 @@ GeneticAlgorithm::GeneticAlgorithm(const std::string& configPath)
     if (!graphJson.isString())
         throw std::runtime_error("Expected 'graph' key in JSON config file.");
 
-    loadGraph(graphJson.asString());
+    try
+    {
+        loadGraph(graphJson.asString());
+    }
+    catch(const std::exception& e)
+    {
+        throw;
+    }
 
     const Json::Value& sizeJson = root["size"];
     if (!sizeJson.isUInt())

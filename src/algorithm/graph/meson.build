@@ -1,5 +1,4 @@
 graph_sources = files(
-    'graph.h',
     'graph.cpp'
 )
 

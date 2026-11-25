@@ -1,14 +1,9 @@
-util_sources = files(
-    'logger.h',
-    'rng.h',
-    'utils.h',
-    'logger.cpp'
-)
+subdir('logger')
 
 util_lib = static_library(
   'util',
-  sources: util_sources,
-  include_directories: inc
+  include_directories: inc,
+  dependencies: [logger_dep]
 )
 
 util_dep = declare_dependency(

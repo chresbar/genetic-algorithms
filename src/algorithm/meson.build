@@ -1,8 +1,8 @@
 subdir('individual')
 subdir('selector')
+subdir('graph')
 
 genetic_algorithm_sources = files(
-    'geneticAlgorithm.h',
     'geneticAlgorithm.cpp'
 )
 
