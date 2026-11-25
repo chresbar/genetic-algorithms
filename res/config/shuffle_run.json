@@ -1,0 +1,7 @@
+{
+    "graph": "/home/bartek/repos/genetic-algorithms/res/city.json",
+    "size": 100,
+    "iterations": 1000,
+    "mutation": 0.1,
+    "strategy": "shuffle"
+}

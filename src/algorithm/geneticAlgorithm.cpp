@@ -5,6 +5,58 @@
 #include <util/logger.h>
 #include <util/utils.h>
 #include <stdexcept>
+#include <json/json.h>
+#include <fstream>
+
+GeneticAlgorithm::GeneticAlgorithm() {}
+
+GeneticAlgorithm::GeneticAlgorithm(const std::string& configPath)
+{
+    std::ifstream file(configPath, std::ifstream::binary);
+
+    if (!file.is_open())
+        throw std::runtime_error("Faild to open file: " + configPath);
+
+    Json::Value root;
+    file >> root;
+
+    const Json::Value& graphJson = root["graph"];
+    if (!graphJson.isString())
+        throw std::runtime_error("Expected 'graph' key in JSON config file.");
+
+    loadGraph(graphJson.asString());
+
+    const Json::Value& sizeJson = root["size"];
+    if (!sizeJson.isUInt())
+        throw std::runtime_error("Expected 'size' key in JSON config file.");
+
+    setSize(sizeJson.asUInt());
+
+    const Json::Value& iterationsJson = root["iterations"];
+    if (!iterationsJson.isUInt())
+        throw std::runtime_error("Expected 'iterations' key in JSON config file.");
+
+    setIterationCount(iterationsJson.asUInt());
+
+    const Json::Value& mutationJson = root["mutation"];
+    if (!mutationJson.isDouble())
+        throw std::runtime_error("Expected 'mutation' key in JSON config file.");
+
+    setMutationRate(mutationJson.asDouble());
+
+    static const std::unordered_map<std::string, Selector::Select> strategyMap = {
+        {"shuffle", Selector::Shuffle::apply},
+        {"elitism", Selector::Elitism::apply},
+        {"tournament", Selector::Tournament::apply}
+    };
+
+    const Json::Value& strategyJson = root["strategy"];
+    if (!strategyJson.isString())
+        throw std::runtime_error("Expected 'strategy' key in JSON config file.");
+
+    if (strategyMap.find(strategyJson.asString()) != strategyMap.end())
+        setSelectStrategy(strategyMap.at(strategyJson.asString()));
+}
 
 void GeneticAlgorithm::loadGraph(const std::string& filepath)
 {

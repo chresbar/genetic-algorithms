@@ -10,7 +10,7 @@ genetic_algorithm_lib = static_library(
   'genetic_algorithm',
   sources: genetic_algorithm_sources,
   include_directories: inc,
-  dependencies: [graph_dep, individual_dep, selector_dep]
+  dependencies: [json_dep, graph_dep, individual_dep, selector_dep]
 )
 
 genetic_algorithm_dep = declare_dependency(

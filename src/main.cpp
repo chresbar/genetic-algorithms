@@ -6,12 +6,7 @@ int main()
 {
     try
     {
-        GeneticAlgorithm algorithm;
-        algorithm.loadGraph(std::string(RES_DIR) + "city.json");
-        algorithm.setSize(100);
-        algorithm.setIterationCount(1000);
-        algorithm.setMutationRate(0.1);
-        algorithm.setSelectStrategy(Selector::Elitism::apply);
+        GeneticAlgorithm algorithm(std::string(RES_DIR) + "config/shuffle_run.json");
         algorithm.run();
         LOG_INFO("Best score: ", algorithm.getBestScore());
     }
