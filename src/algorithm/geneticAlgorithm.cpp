@@ -4,8 +4,8 @@
 #include <utility>
 #include <util/logger/logger.h>
 #include <util/utils.h>
+#include <util/jsonUtil.h>
 #include <stdexcept>
-#include <json/json.h>
 #include <fstream>
 
 GeneticAlgorithm::GeneticAlgorithm() {}
@@ -20,49 +20,32 @@ GeneticAlgorithm::GeneticAlgorithm(const std::string& configPath)
     Json::Value root;
     file >> root;
 
-    const Json::Value& graphJson = root["graph"];
-    if (!graphJson.isString())
-        throw std::runtime_error("Expected 'graph' key in JSON config file.");
+    static const std::unordered_map<std::string, Json::ValueType> configKeys = {
+        {ConfigKeys::Graph, Json::ValueType::stringValue},
+        {ConfigKeys::Size, Json::ValueType::uintValue},
+        {ConfigKeys::Iterations, Json::ValueType::uintValue},
+        {ConfigKeys::Mutation, Json::ValueType::realValue},
+        {ConfigKeys::Strategy, Json::ValueType::stringValue}
+    };
+
+    for (const auto& [key, value] : configKeys)
+    {
+        if (!isJsonType(root[key], value))
+            throw std::runtime_error("Missing '" + key + "' json key or wrong key type.");
+    }
 
     try
     {
-        loadGraph(graphJson.asString());
+        loadGraph(root[ConfigKeys::Graph].asString());
+        setSize(root[ConfigKeys::Size].asUInt());
+        setIterationCount(root[ConfigKeys::Iterations].asUInt());
+        setMutationRate(root[ConfigKeys::Mutation].asDouble());
+        setSelectStrategy(root[ConfigKeys::Strategy].asString());
     }
     catch(const std::exception& e)
     {
         throw;
-    }
-
-    const Json::Value& sizeJson = root["size"];
-    if (!sizeJson.isUInt())
-        throw std::runtime_error("Expected 'size' key in JSON config file.");
-
-    setSize(sizeJson.asUInt());
-
-    const Json::Value& iterationsJson = root["iterations"];
-    if (!iterationsJson.isUInt())
-        throw std::runtime_error("Expected 'iterations' key in JSON config file.");
-
-    setIterationCount(iterationsJson.asUInt());
-
-    const Json::Value& mutationJson = root["mutation"];
-    if (!mutationJson.isDouble())
-        throw std::runtime_error("Expected 'mutation' key in JSON config file.");
-
-    setMutationRate(mutationJson.asDouble());
-
-    static const std::unordered_map<std::string, Selector::Select> strategyMap = {
-        {"shuffle", Selector::Shuffle::apply},
-        {"elitism", Selector::Elitism::apply},
-        {"tournament", Selector::Tournament::apply}
-    };
-
-    const Json::Value& strategyJson = root["strategy"];
-    if (!strategyJson.isString())
-        throw std::runtime_error("Expected 'strategy' key in JSON config file.");
-
-    if (strategyMap.find(strategyJson.asString()) != strategyMap.end())
-        setSelectStrategy(strategyMap.at(strategyJson.asString()));
+    }    
 }
 
 void GeneticAlgorithm::loadGraph(const std::string& filepath)
@@ -123,6 +106,19 @@ void GeneticAlgorithm::setMutationRate(double rate)
 void GeneticAlgorithm::setSelectStrategy(Selector::Select strategy)
 {
     strategy_ = std::move(strategy);
+}
+
+void GeneticAlgorithm::setSelectStrategy(const std::string& strategy)
+{
+    static const std::unordered_map<std::string, Selector::Select> strategyMap = {
+        {"shuffle", Selector::Shuffle::apply},
+        {"elitism", Selector::Elitism::apply},
+        {"tournament", Selector::Tournament::apply}
+    };
+
+    if (strategyMap.find(strategy) == strategyMap.end())
+        throw std::runtime_error("Strategy '" + strategy + "' not found.");
+    setSelectStrategy(strategyMap.at(strategy));
 }
 
 unsigned GeneticAlgorithm::getBestScore() const

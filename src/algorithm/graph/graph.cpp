@@ -1,7 +1,7 @@
 #include "graph.h"
 #include <util/logger/logger.h>
 #include <util/utils.h>
-#include <json/json.h>
+#include <util/jsonUtil.h>
 #include <fstream>
 #include <queue>
 #include <stdexcept>
@@ -32,19 +32,31 @@ void Graph::load(const std::string& filepath)
     Json::Value root;
     file >> root;
 
-    const Json::Value& edgesJson = root["edges"];
-    if (!edgesJson.isArray())
+    if (!isJsonType(root[GraphKeys::Edges], Json::ValueType::arrayValue))
         throw std::runtime_error("Expected 'edges' array in JSON file.");
 
     clear_();
 
-    for (const auto& edge : edgesJson)
+    static const std::unordered_map<std::string, Json::ValueType> graphKeys = {
+        {GraphKeys::Begin, Json::ValueType::uintValue},
+        {GraphKeys::End, Json::ValueType::uintValue},
+        {GraphKeys::Weight, Json::ValueType::uintValue},
+        {GraphKeys::Directed, Json::ValueType::booleanValue}
+    };
+
+    for (const auto& edge : root[GraphKeys::Edges])
     {
+        for (const auto& [key, value] : graphKeys)
+        {
+            if (!isJsonType(edge[key], value))
+                throw std::runtime_error("Missing '" + key + "' json key or wrong value type.");
+        }
+
         addEdge(
-            edge["begin"].asUInt(),
-            edge["end"].asUInt(),
-            edge["weight"].asUInt(),
-            edge["directed"].asBool()
+            edge[GraphKeys::Begin].asUInt(),
+            edge[GraphKeys::End].asUInt(),
+            edge[GraphKeys::Weight].asUInt(),
+            edge[GraphKeys::Directed].asBool()
         );
     }
 

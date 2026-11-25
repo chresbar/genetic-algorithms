@@ -2,8 +2,6 @@ graph_sources = files(
     'graph.cpp'
 )
 
-json_dep = dependency('jsoncpp', required: true)
-
 graph_lib = static_library(
   'graph',
   sources: graph_sources,

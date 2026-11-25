@@ -36,6 +36,7 @@ public:
     void setIterationCount(unsigned count);
     void setMutationRate(double rate);
     void setSelectStrategy(Selector::Select strategy);
+    void setSelectStrategy(const std::string& strategy);
 
     unsigned getBestScore() const;
 };
